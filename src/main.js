@@ -1,30 +1,25 @@
 import Vue from 'vue';
 import iView from 'iview';
 import VueRouter from 'vue-router';
-import Routers from './router';
-import Vuex from 'vuex';
-import Util from './libs/util';
+import store from './store';
+
+import routeConfig from './router/index';
 import App from './app.vue';
-import 'iview/dist/styles/iview.css';
 
 
 Vue.use(VueRouter);
-Vue.use(Vuex);
-
 Vue.use(iView);
 
-
-
-// 路由配置
-const RouterConfig = {
-    mode: 'history',
-    routes: Routers
+const RouteRConfig = {
+    routes:routeConfig.mainRouter
 };
-const router = new VueRouter(RouterConfig);
-
+const router = new VueRouter(RouteRConfig);
 router.beforeEach((to, from, next) => {
+    iView.LoadingBar.config({
+        color: '#16b812',
+        height: 2
+    });
     iView.LoadingBar.start();
-    Util.title(to.meta.title);
     next();
 });
 
@@ -33,26 +28,9 @@ router.afterEach(() => {
     window.scrollTo(0, 0);
 });
 
-
-const store = new Vuex.Store({
-    state: {
-
-    },
-    getters: {
-
-    },
-    mutations: {
-
-    },
-    actions: {
-
-    }
-});
-
-
 new Vue({
     el: '#app',
-    router: router,
-    store: store,
+    router,
+    store,
     render: h => h(App)
 });
