@@ -3,30 +3,13 @@
         <div class="designBox">
             <h3 class="title">ADMIN</h3>
             <div class="slogen">{{register}}<!-- -->admin，发现更多可信赖的解答</div>
-            <Form ref="formInline" :model="formInline" :rules="ruleInline" inline class="design" v-if="flag">
-                <FormItem prop="user" class="inputBox userBox">
-                    <Input type="text" v-model="formInline.user" placeholder="Username" @on-enter="handleSubmit('formInline')">
-                    </Input>
-                </FormItem>
-                <FormItem prop="password" class="inputBox pwsBox">
-                    <Input type="password" v-model="formInline.password" placeholder="Password" @on-enter="handleSubmit('formInline')">
-                    </Input>
-                </FormItem>
-                <div class="options">
-                    <button type="button" class="switchType plain">手机验证码登录</button>
-                    <button type="button" class="cannotLogin plain">忘记密码？</button>
-                </div>
-                <FormItem>
-                    <Button type="primary" class="SignFlow-submitButton" @click="handleSubmit('formInline')">注册</Button> 
-                </FormItem>
-            </Form>
-            <Form ref="formLogin" :model="formLogin" :rules="ruleLogin" inline class="design" v-else>
+            <Form ref="formLogin" :model="formLogin" :rules="ruleLogin" inline class="design" v-if="flag">
                 <FormItem prop="phone" class="inputBox userBox">
-                    <Input type="text" v-model="formLogin.phone" placeholder="请输入手机号" @on-enter="handleSubmitDesign('formLogin')">
+                    <Input type="text" v-model="formLogin.username" placeholder="请输入手机号或邮箱" @on-enter="handleLoginn('formLogin')">
                     </Input>
                 </FormItem>
                 <FormItem prop="code" class="inputBox pwsBox">
-                    <Input type="password" v-model="formLogin.code" placeholder="请输入验证码" @on-enter="handleSubmitDesign('formLogin')">
+                    <Input type="password" v-model="formLogin.password" placeholder="请输入密码" @on-enter="handleLoginn('formLogin')">
                     </Input>
                 </FormItem>
                 <div class="options">
@@ -34,7 +17,24 @@
                     <button type="button" class="cannotLogin plain"></button>
                 </div>
                 <FormItem>
-                    <Button type="primary" class="SignFlow-submitButton" @click="handleSubmitDesign('formLogin')">登录</Button> 
+                    <Button type="primary" class="SignFlow-submitButton" @click="handleLoginn('formLogin')">登录</Button> 
+                </FormItem>
+            </Form>
+            <Form ref="formRegister" :model="formRegister" :rules="ruleRegister" inline class="design" v-else>
+                <FormItem prop="user" class="inputBox userBox">
+                    <Input type="text" v-model="formRegister.phone" placeholder="phone" @on-enter="handleRegister('ruleRegister')">
+                    </Input>
+                </FormItem>
+                <FormItem prop="password" class="inputBox pwsBox">
+                    <Input type="password" v-model="formRegister.code" placeholder="code" @on-enter="handleRegister('ruleRegister')">
+                    </Input>
+                </FormItem>
+                <div class="options">
+                    <button type="button" class="switchType plain">手机验证码登录</button>
+                    <button type="button" class="cannotLogin plain">忘记密码？</button>
+                </div>
+                <FormItem>
+                    <Button type="primary" class="SignFlow-submitButton" @click="handleRegister('ruleRegister')">注册</Button> 
                 </FormItem>
             </Form>
             <div class="SignContainer-switch" @click="loginRegister">{{existing}}<span>{{login}}</span></div>
@@ -43,28 +43,30 @@
 </template>
 
 <script>
+import utils from '../../libs/util.js';
+import Axios from 'axios';
 export default {
     name:'loginBox',
     data () {
         return {
-            formInline: {
+            formLogin: {
                 user: '',
                 password: ''
             },
-            formLogin: {
+            formRegister: {
                 phone: '',
                 code: ''
             },
-            ruleInline: {
+            ruleLogin: {
                 user: [
                     { required: true, message: '请输入手机号或邮箱', trigger: 'blur' }
                 ],
                 password: [
                     { required: true, message: '请输入密码.', trigger: 'blur' },
-                    { type: 'string', min: 6, message: '密码不少于6位', trigger: 'blur' }
+                    { type: 'string', min: 5, message: '密码不少于5位', trigger: 'blur' }
                 ]
             },
-            ruleLogin:{
+            ruleRegister:{
                 phone: [
                     { required: true, message: '请输入手机号', trigger: 'blur' }
                 ],
@@ -83,21 +85,37 @@ export default {
         
     },
     methods: {
-        handleSubmit(formInline) {
-            this.$refs[formInline].validate((valid) => {
+        handleRegister(formRegister) {
+            var $this = this;
+            $this.$refs[formRegister].validate((valid) => {
                 if (valid) {
-                    this.$Message.success('Success!');
+                   var loginData ={};
+                   utils.ajax($this).get(['/login','?',utils.qs(loginData)].join('')).then(function(res){
+                       console.log(res)
+                   })
                 } else {
-                    this.$Message.error('Fail!');
+                    console.log(3)
+                    $this.$Message.error('Fail!');
                 }
             })
         },
-        handleSubmitDesign(formLogin) {
-            this.$refs[formLogin].validate((valid) => {
-                if (valid) {
-                    this.$Message.success('Success!');
+        handleLoginn(name) {
+            var $this = this;
+            $this.$refs[name].validate((valid) => {
+               if (valid) {
+                   var loginData ={};
+                   loginData.username = $this.formLogin.username;
+                    loginData.password = $this.formLogin.password;
+                    // Axios.get('http://localhost/login').then(function(res){
+                    //     console.log(res)
+                    // })
+                   utils.ajax.get(['/login', '?', utils.qs(loginData)].join('')).then(function(res){
+                       console.log(res)
+                   })
+            
                 } else {
-                    this.$Message.error('Fail!');
+                    console.log(2)
+                    $this.$Message.error('Fail!');
                 }
             })
         },
