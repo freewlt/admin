@@ -64,5 +64,5 @@
     "webpack-dev-server": "^2.9.2",
     "webpack-merge": "^4.1.1"
   },
-  "proxy": "http://localhost:3000/"
+  "proxy": "http://localhost:3000/api"
 }

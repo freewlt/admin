@@ -10,7 +10,7 @@ util.title = function(title) {
 };
 
 const ajaxUrl = env === 'development' ?
-    'http://127.0.0.1:8080' :
+    'http://127.0.0.1:8891' :
     env === 'production' ?
     'http://localhost:3000' ://后台接口地址
     'https://debug.url.com';

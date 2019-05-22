@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import store from './store';
 
 import routeConfig from './router/index';
+import 'iview/dist/styles/iview.css';
 import App from './app.vue';
 
 
