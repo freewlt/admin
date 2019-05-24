@@ -10,13 +10,14 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+
 const state = {
     first: 15,
     second: 18,
     listUser:[
         {user:'admin', password:123456, done: true},
         {user:'admin1', password:'admin1',done: false}
-    ]
+    ],
 };
 const getters = {
     doneUser: state =>{

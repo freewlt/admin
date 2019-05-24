@@ -7,7 +7,6 @@ import routeConfig from './router/index';
 import 'iview/dist/styles/iview.css';
 import App from './app.vue';
 
-
 Vue.use(VueRouter);
 Vue.use(iView);
 
@@ -17,7 +16,8 @@ const RouteRConfig = {
 const router = new VueRouter(RouteRConfig);
 router.beforeEach((to, from, next) => {
     iView.LoadingBar.config({
-        color: '#16b812',
+        color: '#5cb85c',
+        failedColor: '#f0ad4e',
         height: 2
     });
     iView.LoadingBar.start();
@@ -26,7 +26,6 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach(() => {
     iView.LoadingBar.finish();
-    window.scrollTo(0, 0);
 });
 
 new Vue({

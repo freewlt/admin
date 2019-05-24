@@ -14,12 +14,31 @@ const mainRouter = [
     {
         path:'/', 
         component: (resolve) => require(['../views/login/index.vue'], resolve),
-        hidden:true
+    },
+    {
+        path:'/login', 
+        name:'login',
+        component: (resolve) => require(['../views/login/index.vue'], resolve),
     },
     {
         path:'/home',
-        // hidden:false,
+        name:'homeBox',
         component: (resolve) => require(['../views/home/index.vue'], resolve)
+    },
+    {
+        path:'/register',
+        name:'register',
+        component: (resolve) => require(['../views/register/index.vue'], resolve)
+    },
+    {
+        path:'/findPwd',
+        name:'findPwd',
+        component: (resolve) => require(['../views/findPwd/index.vue'], resolve)
+    },
+    {
+        path:'/setPwd',
+        name:'setPwd',
+        component: (resolve) => require(['../views/findPwd/setPwd.vue'], resolve)
     }
 ];
 
